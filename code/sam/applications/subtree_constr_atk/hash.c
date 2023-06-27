@@ -13,9 +13,6 @@
 
 #define RAND_MODULO SPHINCS_BYTES
 
-#ifndef WITH_SOFTWARE_FAULT
-#error "bru"
-#endif
 #ifdef WITH_SOFTWARE_FAULT
 unsigned char do_fault = 0;
 #endif

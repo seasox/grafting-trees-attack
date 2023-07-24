@@ -381,16 +381,12 @@ static void subtree_constr(unsigned char const sk1[SEED_BYTES],
 			{
 				TRIGGER;
 #ifdef WITH_SOFTWARE_FAULT
-        unsigned char mask[2*SPHINCS_BYTES];
-        memcpy(mask, masks + 2*(WOTS_LOG_L + i)*SPHINCS_BYTES, 2*SPHINCS_BYTES);
-        if (rand() % 2 == 1) {
-          mask[2*SPHINCS_BYTES-1] = mask[2*SPHINCS_BYTES-1] ^ (rand() & 0xff);
-        }
-        hash_nn_n_mask(leaves + (j/2)*SPHINCS_BYTES, leaves + (j)*SPHINCS_BYTES,
-                       leaves + (j+1)*SPHINCS_BYTES, mask);
-#else
-        hash_nn_n_mask(leaves + (j/2)*SPHINCS_BYTES, leaves + (j)*SPHINCS_BYTES,
-                       leaves + (j+1)*SPHINCS_BYTES, masks + 2*(WOTS_LOG_L + i)*SPHINCS_BYTES);
+				do_fault = 1;
+#endif /* WITH_SOFTWARE_FAULT */
+				hash_nn_n_mask(leaves + (j/2)*SPHINCS_BYTES, leaves + (j)*SPHINCS_BYTES,
+					       leaves + (j+1)*SPHINCS_BYTES, masks + 2*(WOTS_LOG_L + i)*SPHINCS_BYTES);
+#ifdef WITH_SOFTWARE_FAULT
+				do_fault = 0;
 #endif /* WITH_SOFTWARE_FAULT */
 				TRIGGER;
 			}
